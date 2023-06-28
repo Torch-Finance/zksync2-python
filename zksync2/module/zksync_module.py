@@ -35,6 +35,7 @@ from web3.method import Method, default_root_munger
 from typing import Any, Callable, List, Union
 
 zks_estimate_fee_rpc = RPCEndpoint("zks_estimateFee")
+zks_estimate_gas_l1_to_l2 = RPCEndpoint("zks_estimateGasL1ToL2")
 zks_main_contract_rpc = RPCEndpoint("zks_getMainContract")
 zks_get_confirmed_tokens_rpc = RPCEndpoint("zks_getConfirmedTokens")
 zks_get_token_price_rpc = RPCEndpoint("zks_getTokenPrice")
@@ -198,6 +199,13 @@ class ZkSync(Eth, ABC):
         result_formatters=zksync_get_result_formatters
     )
 
+    _zks_estimate_gas_l1_to_l2: Method[Callable[[Transaction], int]] = Method(
+        zks_estimate_gas_l1_to_l2,
+        mungers=[default_root_munger],
+        request_formatters=zksync_get_request_formatters,
+        result_formatters=zksync_get_result_formatters
+    )
+
     _zks_main_contract: Method[Callable[[], ZksMainContract]] = Method(
         zks_main_contract_rpc,
         mungers=None
@@ -280,6 +288,9 @@ class ZkSync(Eth, ABC):
 
     def zks_estimate_fee(self, transaction: Transaction) -> Fee:
         return self._zks_estimate_fee(transaction)
+
+    def zks_estimate_gas_l1_to_l2(self, transaction: Transaction) -> int:
+        return self._zks_estimate_gas_l1_to_l2(transaction)
 
     def zks_main_contract(self) -> HexStr:
         if self.main_contract_address is None:
