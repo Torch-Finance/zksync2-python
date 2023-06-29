@@ -8,7 +8,7 @@ from web3 import Web3
 from web3._utils.threads import Timeout
 from web3.exceptions import TransactionNotFound, TimeExhausted
 from web3.module import Module
-from web3._utils.formatters import integer_to_hex
+from web3._utils.formatters import integer_to_hex, hex_to_integer
 from web3._utils.method_formatters import (
     ABI_REQUEST_FORMATTERS,
     METHOD_NORMALIZERS,
@@ -143,7 +143,8 @@ ZKSYNC_RESULT_FORMATTERS: Dict[RPCEndpoint, Callable[..., Any]] = {
     zks_get_all_account_balances_rpc: to_zks_account_balances,
     zks_estimate_fee_rpc: to_fee,
     zks_get_l2_to_l1_log_proof_prc: to_msg_proof,
-    zks_get_l2_to_l1_msg_proof_prc: to_msg_proof
+    zks_get_l2_to_l1_msg_proof_prc: to_msg_proof,
+    zks_estimate_gas_l1_to_l2: hex_to_integer,
 }
 
 
